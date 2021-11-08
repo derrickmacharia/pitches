@@ -19,9 +19,12 @@
     
   {% for post in posts %}
 
-    <a href="{{ url_for('main.post_details', id = post.id)}}">{{ post.title }}
-    <p>{{ post.category }}</p>
-    <p>{{ post.content }}</p></a>
+    <a href="{{ url_for('main.post_details', id = post.id)}}">{{ post.title }}</a>
+    <p>Category : {{ post.category }}</p>
+    <p>Pitch : {{ post.content }}</p>
+    <p>Posted on : {{post.date_posted.strftime('%Y-%m-%d')}}</p>
+    <p>Posted by: {{post.user.username}}</p>
+    <button type="button" class="btn btn-secondary"> <a href="{{ url_for('main.post_details', id = post.id)}}">Add Comment</a></button>
 
     {% endfor %}
 </body>
