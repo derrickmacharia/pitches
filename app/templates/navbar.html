@@ -17,7 +17,7 @@
               {% if current_user.is_authenticated %}
               <li class="user"><a href="{{url_for('main.profile',uname=current_user.username)}}">{{current_user.username}}</a></li>
               <li><a href="{{url_for('auth.logout')}}">Sign out</a></li>
-              <li><a href="/post" class="tag"> Pitch Here</a></li>
+              <li><a href="/post" class="tag">Write Pitch</a></li>
               {% else %}
               <li><a href="{{url_for('auth.login')}}">Sign in</a></li>
               {%endif%}

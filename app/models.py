@@ -21,6 +21,9 @@ class Post(db.Model):
     content = db.Column(db.Text)
     date_posted = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    upvote = db.relationship('Upvote',backref='pitch',lazy='dynamic')
+    downvote = db.relationship('Downvote',backref='pitch',lazy='dynamic')
+
     
     # save post
 
@@ -69,3 +72,40 @@ class Comment(db.Model):
 
     def _repr_(self):
         return f'Comment {self.content}'
+
+
+class Upvote(db.Model):
+  _tablename_ = 'upvotes'
+  id = db.Column(db.Integer,primary_key=True)
+  user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+  post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
+  def save(self):
+    db.session.add(self)
+    db.session.commit()
+
+  @classmethod
+  def get_upvotes(cls,id):
+    upvote = Upvote.query.filter_by(post_id=id).all()
+    return upvote
+
+  def _repr_(self):
+      return f'{self.user_id}:{self.post_id}'
+
+
+class Downvote(db.Model):
+  _tablename_ = 'downvotes'
+  id = db.Column(db.Integer,primary_key=True)
+  user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+  post_id = db.Column(db.Integer,db.ForeignKey('post.id'))
+
+  def save(self):
+    db.session.add(self)
+    db.session.commit()
+
+  @classmethod
+  def get_downvotes(cls,id):
+    downvote = Downvote.query.filter_by(post_id=id).all()
+    return downvote
+
+  def _repr_(self):
+    return f'{self.user_id}:{self.post_id}'
