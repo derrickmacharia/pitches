@@ -15,9 +15,15 @@
       <!-- Top News -->
     <h2> PITCH-ES </h2>
     <hr>
-
   </div>
     
+  {% for post in posts %}
+
+    <a href="{{ url_for('main.post_details', id = post.id)}}">{{ post.title }}
+    <p>{{ post.category }}</p>
+    <p>{{ post.content }}</p></a>
+
+    {% endfor %}
 </body>
 
 {% endblock%}

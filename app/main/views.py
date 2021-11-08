@@ -1,9 +1,9 @@
-from flask import render_template,request,redirect,url_for,abort
+from flask import render_template,request,redirect,url_for,abort,flash
 from . import main
-from ..models import User,Post
+from ..models import User,Post, Comment
 from flask_login import login_required,current_user
 from .. import db,photos
-from .forms import PostForm, UpdateProfile
+from .forms import PostForm, UpdateProfile, CommentForm
 
 
 #views
@@ -14,7 +14,8 @@ def index():
     '''
     post_form = PostForm()
     all_posts = Post.query.order_by(Post.date_posted).all()
-    return render_template('index.html', pitches = all_posts)
+    return render_template('index.html', posts = all_posts)
+
 
 
 @main.route('/post', methods=['GET', 'POST'])
@@ -23,7 +24,9 @@ def new_post():
     post_form = PostForm()
     if post_form.validate_on_submit():
         title = post_form.post_title.data
-        new_post = Post(title=title, user=current_user)
+        category = post_form.category.data
+        content = post_form.content.data
+        new_post = Post(title=title, user=current_user, category=category, content=content)
         new_post.save_post()
         db.session.add(new_post)
         db.session.commit()
@@ -34,7 +37,26 @@ def new_post():
 
     return render_template('pitches.html', posts=all_posts,post_form = post_form)
 
-
+@main.route('/post/<id>', methods=['GET', 'POST'])
+@login_required
+def post_details(id):
+    # get all comments of the pitch
+    comments = Comment.query.filter_by(post_id=id).all()
+    posts = Post.query.get(id)
+    if posts is None:
+        abort(404)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(
+            content=form.content.data,
+            post_id=id,
+            user_id=current_user.id
+        )
+        db.session.add(comment)
+        db.session.commit()
+        form.content.data = ''
+        flash('Your comment has been posted successfully!')
+    return render_template('comments.html',post= posts, comment=comments, comment_form = form)
 
 @main.route('/user/<uname>')
 def profile(uname):

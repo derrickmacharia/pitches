@@ -2,7 +2,7 @@ from . import db,login_manager
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from datetime import datetime
-from datetime import datetime
+
 
 
 #Added this code to solve the Exception: Missing user_loader or request_loader.
@@ -17,10 +17,13 @@ class Post(db.Model):
     _tablename_ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
+    category = db.Column(db.String(255))
+    content = db.Column(db.Text)
     date_posted = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # comment = db.relationship('Comment', backref='post', lazy='dynamic')
+    
     # save post
+
     def save_post(self):
         db.session.add(self)
         db.session.commit()
@@ -51,3 +54,18 @@ class User(UserMixin,db.Model):
     def __repr__(self):
         return f'User {self.username}'
 
+# comment table
+class Comment(db.Model):
+    _tablename_ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text)
+    date_posted = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def _repr_(self):
+        return f'Comment {self.content}'
