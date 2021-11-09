@@ -14,12 +14,13 @@ This is a Python Application where a user(s) can post a one minute pitches and a
 
 ## Screenshots
 
-<img src="">
+<img src="app/static/images/Screenshot (2).png">
+<img src="app/static/images/Screenshot (3).png">
 
 ## User Story
   A user can;
 * Register to be allowed to log in to the application
-* Comment on different pitches posted py other users.
+* Comment on different pitches posted by other users.
 * View the pitches posted by other users.
 * Vote on some or all pitches they have viewed by giving it a upvote or a downvote.
 * View pitches of different categories.
