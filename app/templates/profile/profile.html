@@ -7,36 +7,54 @@
 {% endblock %}
 
 <div class="container">
-<div class="row">
-<!-- displaying  Username-->
-  <div class="col-md-6 text-center cards cards1">
-    <h3>Username : {{user.username| capitalize}} </h3>
-    <p>Bio : {{user.bio}}</p>
-    <p>Email : {{user.email}}</p>
-    <!--Displaying user bio-->
-    {% if user.bio %}
-      
-    {%else%}
-      <p> {{user.username| capitalize}} has no bio </p>
-    {% endif %}
-    {%if user == current_user %}
-    <a href="{{url_for('main.update_profile',uname=user.username)}}">Edit Profile</a>
-    {%endif%}
+  <div class="row">
+  <!-- displaying  Username-->
+    <div class="col-md-6 text-center cards cards1">
+      <h3>Username : {{user.username| capitalize}} </h3>
+      <p>Bio : {{user.bio}}</p>
+      <p>Email : {{user.email}}</p>
+      <!--Displaying user bio-->
+      {% if user.bio %}
+
+      {%else%}
+        <p> {{user.username| capitalize}} has no bio </p>
+      {% endif %}
+      {%if user == current_user %}
+      <a href="{{url_for('main.update_profile',uname=user.username)}}">Edit Profile</a>
+      {%endif%}
+    </div>
+    <!--Display profile photo-->
+    <div class="col-md-5 cards">
+      {% if user.profile_pic_path %}
+      <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt="" class="img-thumbnail">
+      {%else%}
+      <p>No profile picture</p>
+      {% endif %}
+      {% if user == current_user %}
+      <form  action="{{url_for('main.update_pic',uname=user.username)}}" method="post" enctype = "multipart/form-data">
+        <input type="file"  name="photo" class="form-control" required>
+        <input type="submit">
+      </form>
+      {% endif %}
+    </div>
+
   </div>
-  <!--Display profile photo-->
-  <div class="col-md-5 cards">
-    {% if user.profile_pic_path %}
-    <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt="" class="img-thumbnail">
-    {%else%}
-    <p>No profile picture</p>
-    {% endif %}
-    {% if user == current_user %}
-    <form  action="{{url_for('main.update_pic',uname=user.username)}}" method="post" enctype = "multipart/form-data">
-      <input type="file"  name="photo" class="form-control" required>
-      <input type="submit">
-    </form>
-    {% endif %}
+  <div class="col-md-1"></div>
+    <div class="col-md-5" id="user">
+      {% if current_user %}
+      <h3>You have {{user.post.count()}} Pitches</h3>
+      {% for i in posts%}
+      <div class="card pitches">
+        <h4>Title: {{i.title}}</h4>
+        <h6>{{i.post}}</h6>
+        <p>{{i.comment.count()}} Comments</p>
+      </div>
+      <hr>
+      {%endfor%}
+      {%else%}
+      <h3>You have ) posts</h3>
+      {%endif%}
+    </div>
   </div>
-</div>
 </div>
 {% endblock %}
