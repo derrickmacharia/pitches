@@ -14,9 +14,16 @@ This is a Python Application where a user(s) can post a one minute pitches and a
 
 ## Screenshots
 
+## Screenshot 1
 <img src="app/static/images/Screenshot (2).png">
+
+## Screenshot 2
 <img src="app/static/images/Screenshot (3).png">
+
+## Screenshot 3
 <img src="app/static/images/Screenshot (1).png">
+
+## Screenshot 4
 <img src="app/static/images/Screenshot (0).png">
 
 ## User Story
